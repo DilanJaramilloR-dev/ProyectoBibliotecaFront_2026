@@ -11,4 +11,9 @@ public class AutorDto {
     private String apellidoAutor;
     private String nacionalidadAutor;
     private LocalDate fechaNacimiento;
+
+    @Override
+    public String toString() {
+        return nombreAutor + (apellidoAutor == null || apellidoAutor.isBlank() ? "" : " " + apellidoAutor);
+    }
 }

@@ -19,6 +19,15 @@ public class MainFrame extends JFrame {
     @Autowired
     private AutoresFrame autoresFrame;
 
+    @Autowired
+    private EditorialesFrame editorialesFrame;
+
+    @Autowired
+    private CategoriasFrame categoriasFrame;
+
+    @Autowired
+    private LibrosFrame librosFrame;
+
     public void inicializar() {
         setTitle("Sistema de Biblioteca - El Buen Futuro");
         setSize(600, 420);
@@ -38,9 +47,9 @@ public class MainFrame extends JFrame {
         panel.add(crearBoton("Usuarios", e -> usuariosFrame.abrir(this)));
         panel.add(crearBoton("Bibliotecarios", e -> bibliotecariosFrame.abrir(this)));
         panel.add(crearBoton("Autores", e -> autoresFrame.abrir(this)));
-        panel.add(crearBoton("Editoriales", enConstruccion("Editoriales")));
-        panel.add(crearBoton("Categorías", enConstruccion("Categorías")));
-        panel.add(crearBoton("Libros", enConstruccion("Libros")));
+        panel.add(crearBoton("Editoriales", e -> editorialesFrame.abrir(this)));
+        panel.add(crearBoton("Categorías", e -> categoriasFrame.abrir(this)));
+        panel.add(crearBoton("Libros", e -> librosFrame.abrir(this)));
         panel.add(crearBoton("Ejemplares", enConstruccion("Ejemplares")));
         panel.add(crearBoton("Préstamos", enConstruccion("Préstamos")));
         panel.add(crearBoton("Sanciones", enConstruccion("Sanciones")));
