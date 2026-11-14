@@ -1,0 +1,13 @@
+package edu.itm.proyecto2026.frontend.Dtos;
+
+import lombok.Data;
+
+import java.time.LocalDate;
+
+@Data
+public class UsuarioDto {
+    private Integer idUsuario;
+    private PersonaDto persona;
+    private String direccionUsuario;
+    private LocalDate fechaRegistroUsuario;
+}
