@@ -37,6 +37,12 @@ public class MainFrame extends JFrame {
     @Autowired
     private SancionesFrame sancionesFrame;
 
+    @Autowired
+    private CatalogoFrame catalogoFrame;
+
+    @Autowired
+    private ReportesFrame reportesFrame;
+
     public void inicializar() {
         setTitle("Sistema de Biblioteca - El Buen Futuro");
         setSize(600, 420);
@@ -62,8 +68,8 @@ public class MainFrame extends JFrame {
         panel.add(crearBoton("Ejemplares", e -> ejemplaresFrame.abrir(this)));
         panel.add(crearBoton("Préstamos", e -> prestamosFrame.abrir(this)));
         panel.add(crearBoton("Sanciones", e -> sancionesFrame.abrir(this)));
-        panel.add(crearBoton("Catálogo", enConstruccion("Catálogo")));
-        panel.add(crearBoton("Reportes", enConstruccion("Reportes")));
+        panel.add(crearBoton("Catálogo", e -> catalogoFrame.abrir(this)));
+        panel.add(crearBoton("Reportes", e -> reportesFrame.abrir(this)));
         panel.add(crearBoton("Salir", salir()));
 
         add(panel, BorderLayout.CENTER);
@@ -74,11 +80,6 @@ public class MainFrame extends JFrame {
         boton.setFont(new Font("SansSerif", Font.BOLD, 14));
         boton.addActionListener(accion);
         return boton;
-    }
-
-    private ActionListener enConstruccion(String seccion) {
-        return e -> JOptionPane.showMessageDialog(this,
-                "La sección " + seccion + " aún está en construcción.");
     }
 
     private ActionListener salir() {
