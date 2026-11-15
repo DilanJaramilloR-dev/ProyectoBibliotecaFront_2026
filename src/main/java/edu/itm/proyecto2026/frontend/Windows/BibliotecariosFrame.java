@@ -201,8 +201,7 @@ public class BibliotecariosFrame extends JFrame {
             aviso("Selecciona un bibliotecario de la tabla.");
             return;
         }
-        int respuesta = JOptionPane.showConfirmDialog(this,
-                "¿Eliminar el bibliotecario seleccionado?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Eliminar el bibliotecario seleccionado?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (respuesta != JOptionPane.YES_OPTION) {
             return;
         }
