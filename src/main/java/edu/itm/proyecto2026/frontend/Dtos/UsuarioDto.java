@@ -10,4 +10,12 @@ public class UsuarioDto {
     private PersonaDto persona;
     private String direccionUsuario;
     private LocalDate fechaRegistroUsuario;
+
+    @Override
+    public String toString() {
+        if (persona == null) {
+            return "Usuario " + idUsuario;
+        }
+        return persona.getNombrePersona() + " " + persona.getApellidoPersona();
+    }
 }

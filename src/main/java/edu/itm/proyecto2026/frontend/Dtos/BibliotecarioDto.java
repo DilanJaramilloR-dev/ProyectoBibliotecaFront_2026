@@ -9,4 +9,12 @@ public class BibliotecarioDto {
     private String usuarioLoginBibliotecario;
     private String contrasenaBibliotecario;
     private String documentoBibliotecario;
+
+    @Override
+    public String toString() {
+        if (persona == null) {
+            return "Bibliotecario " + idBibliotecario;
+        }
+        return persona.getNombrePersona() + " " + persona.getApellidoPersona();
+    }
 }

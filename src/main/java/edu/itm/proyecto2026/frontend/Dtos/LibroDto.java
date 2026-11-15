@@ -14,4 +14,9 @@ public class LibroDto {
     private String isbnLibro;
     private Integer anioPublicacionLibro;
     private List<AutorDto> autores;
+
+    @Override
+    public String toString() {
+        return tituloLibro;
+    }
 }
