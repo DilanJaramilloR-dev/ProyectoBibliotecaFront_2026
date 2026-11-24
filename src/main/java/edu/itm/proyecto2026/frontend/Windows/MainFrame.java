@@ -45,19 +45,19 @@ public class MainFrame extends JFrame {
 
     public void inicializar() {
         setTitle("Sistema de Biblioteca - El Buen Futuro");
-        setSize(600, 420);
+        setSize(760, 520);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout());
+        BibliotecaTheme.estilizarVentana(this);
 
-        JLabel titulo = new JLabel("Menú principal", SwingConstants.CENTER);
-        titulo.setFont(new Font("SansSerif", Font.BOLD, 22));
-        titulo.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-        add(titulo, BorderLayout.NORTH);
+        add(BibliotecaTheme.crearEncabezado("El Buen Futuro",
+                "Sistema de gestión bibliotecaria"), BorderLayout.NORTH);
 
-        JPanel panel = new JPanel(new GridLayout(4, 3, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
+        JPanel panel = new JPanel(new GridLayout(4, 3, 14, 14));
+        panel.setBackground(BibliotecaTheme.CREMA);
+        panel.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
 
         panel.add(crearBoton("Usuarios", e -> usuariosFrame.abrir(this)));
         panel.add(crearBoton("Bibliotecarios", e -> bibliotecariosFrame.abrir(this)));
@@ -77,7 +77,11 @@ public class MainFrame extends JFrame {
 
     private JButton crearBoton(String texto, ActionListener accion) {
         JButton boton = new JButton(texto);
-        boton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        BibliotecaTheme.estilizarBoton(boton);
+        boton.setPreferredSize(new Dimension(190, 55));
+        if (texto.equals("Salir")) {
+            boton.setBackground(BibliotecaTheme.MADERA);
+        }
         boton.addActionListener(accion);
         return boton;
     }

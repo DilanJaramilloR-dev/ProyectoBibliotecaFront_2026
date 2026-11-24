@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Préstamos | Biblioteca El Buen Futuro</title>
+    <link rel="stylesheet" th:href="@{/css/biblioteca.css}">
+</head>
+<body class="pagina-prestamos">
+    <header class="encabezado-principal">
+        <a class="marca-biblioteca" th:href="@{/}">
+            <span class="marca-icono">BF</span>
+            <span class="marca-texto">
+                <strong class="marca-nombre">El Buen Futuro</strong>
+                <small class="marca-eslogan">Biblioteca</small>
+            </span>
+        </a>
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+            <a class="enlace-navegacion" th:href="@{/}">Inicio</a>
+            <a class="enlace-navegacion" th:href="@{/catalogo}">Catálogo</a>
+            <a class="enlace-navegacion activo" th:href="@{/prestamos}">Préstamos</a>
+        </nav>
+    </header>
+
+    <main class="contenido-principal contenido-prestamos">
+        <section class="encabezado-catalogo">
+            <p class="texto-etiqueta">Circulación bibliotecaria</p>
+            <h1 class="titulo-catalogo">Préstamos</h1>
+        </section>
+
+        <div class="mensaje-backend mensaje-exito" th:if="${mensajeExito}" th:text="${mensajeExito}"></div>
+        <div class="mensaje-backend mensaje-error" th:if="${mensajeError}" th:text="${mensajeError}"></div>
+
+        <div class="mensaje-backend mensaje-alerta" th:if="${!backendDisponible}">
+            No fue posible cargar los datos del backend.
+        </div>
+
+        <section class="panel-nuevo-prestamo" th:if="${backendDisponible}">
+            <div class="encabezado-panel">
+                <div>
+                    <p class="texto-etiqueta">Nuevo registro</p>
+                    <h2 class="titulo-panel">Crear préstamo</h2>
+                </div>
+            </div>
+
+            <form class="formulario-prestamo" th:action="@{/prestamos/nuevo}" method="post">
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="ejemplarId">Ejemplar disponible</label>
+                    <select class="campo-texto campo-select" id="ejemplarId" name="ejemplarId" required>
+                        <option value="" disabled selected>Selecciona un ejemplar</option>
+                        <option th:each="ejemplar : ${ejemplaresDisponibles}"
+                                th:value="${ejemplar.idEjemplar}"
+                                th:text="${ejemplar.codigoInventario + ' - ' + (ejemplar.libro != null ? ejemplar.libro.tituloLibro : 'Libro')}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="usuarioId">Usuario</label>
+                    <select class="campo-texto campo-select" id="usuarioId" name="usuarioId" required>
+                        <option value="" disabled selected>Selecciona un usuario</option>
+                        <option th:each="usuario : ${usuarios}"
+                                th:value="${usuario.idUsuario}"
+                                th:text="${usuario.persona != null ? usuario.persona.nombrePersona + ' ' + usuario.persona.apellidoPersona : 'Usuario ' + usuario.idUsuario}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="bibliotecarioId">Bibliotecario</label>
+                    <select class="campo-texto campo-select" id="bibliotecarioId" name="bibliotecarioId" required>
+                        <option value="" disabled selected>Selecciona un bibliotecario</option>
+                        <option th:each="bibliotecario : ${bibliotecarios}"
+                                th:value="${bibliotecario.idBibliotecario}"
+                                th:text="${bibliotecario.persona != null ? bibliotecario.persona.nombrePersona + ' ' + bibliotecario.persona.apellidoPersona : 'Bibliotecario ' + bibliotecario.idBibliotecario}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="fechaPrestamo">Fecha de préstamo</label>
+                    <input class="campo-texto" id="fechaPrestamo" name="fechaPrestamo" type="date"
+                           th:value="${fechaHoy}" required>
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="fechaDevolucionPrevista">Devolución prevista</label>
+                    <input class="campo-texto" id="fechaDevolucionPrevista" name="fechaDevolucionPrevista" type="date"
+                           th:value="${fechaDevolucion}" required>
+                </div>
+
+                <button class="boton boton-primario boton-crear-prestamo" type="submit">Registrar préstamo</button>
+            </form>
+        </section>
+
+        <section class="seccion-prestamos">
+            <div class="barra-resultados">
+                <p class="cantidad-resultados">
+                    <strong th:text="${#lists.size(prestamos)}">0</strong> préstamos registrados
+                </p>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-libros tabla-prestamos">
+                    <thead class="tabla-cabecera">
+                        <tr class="fila-cabecera">
+                            <th class="celda-cabecera">ID</th>
+                            <th class="celda-cabecera">Usuario</th>
+                            <th class="celda-cabecera">Ejemplar</th>
+                            <th class="celda-cabecera">Estado</th>
+                            <th class="celda-cabecera">Préstamo</th>
+                            <th class="celda-cabecera">Devolución prevista</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tabla-cuerpo">
+                        <tr class="fila-libro" th:each="prestamo : ${prestamos}">
+                            <td class="celda-libro" th:text="${prestamo.idPrestamo}">1</td>
+                            <td class="celda-libro"
+                                th:text="${prestamo.usuario != null ? prestamo.usuario : '—'}">Usuario</td>
+                            <td class="celda-libro"
+                                th:text="${prestamo.ejemplar != null ? prestamo.ejemplar : '—'}">Ejemplar</td>
+                            <td class="celda-libro">
+                                <span class="estado-prestamo"
+                                      th:classappend="${prestamo.estadoPrestamo == 'activo'} ? ' activo' : ' devuelto'"
+                                      th:text="${prestamo.estadoPrestamo}">activo</span>
+                            </td>
+                            <td class="celda-libro" th:text="${prestamo.fechaPrestamo}">Fecha</td>
+                            <td class="celda-libro" th:text="${prestamo.fechaDevolucionPrevista}">Fecha</td>
+                        </tr>
+                        <tr class="fila-vacia" th:if="${#lists.isEmpty(prestamos)}">
+                            <td class="celda-vacia" colspan="6">No hay préstamos registrados.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p class="texto-pie">Sistema de Biblioteca El Buen Futuro</p>
+    </footer>
+</body>
+</html>

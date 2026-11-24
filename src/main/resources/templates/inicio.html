@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca El Buen Futuro</title>
+    <link rel="stylesheet" th:href="@{/css/biblioteca.css}">
+</head>
+<body class="pagina-inicio">
+    <header class="encabezado-principal">
+        <a class="marca-biblioteca" th:href="@{/}">
+            <span class="marca-icono">BF</span>
+            <span class="marca-texto">
+                <strong class="marca-nombre">El Buen Futuro</strong>
+                <small class="marca-eslogan">Biblioteca</small>
+            </span>
+        </a>
+
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+            <a class="enlace-navegacion activo" th:href="@{/}">Inicio</a>
+            <a class="enlace-navegacion" th:href="@{/catalogo}">Catálogo</a>
+            <a class="enlace-navegacion" th:href="@{/prestamos}">Préstamos</a>
+        </nav>
+    </header>
+
+    <main class="contenido-principal">
+        <section class="seccion-hero">
+            <div class="hero-contenido">
+                <p class="hero-etiqueta">Tu próxima lectura te espera</p>
+                <h1 class="hero-titulo">Descubre historias que dejan huella</h1>
+                <p class="hero-descripcion">
+                    Explora el catálogo, encuentra tus autores favoritos y descubre nuevos mundos.
+                </p>
+                <a class="boton boton-primario" th:href="@{/catalogo}">Explorar catálogo</a>
+            </div>
+
+            <div class="hero-ilustracion" aria-hidden="true">
+                <div class="estante-estilo">
+                    <span class="libro-verde"></span>
+                    <span class="libro-dorado"></span>
+                    <span class="libro-crema"></span>
+                    <span class="libro-burdeos"></span>
+                    <span class="libro-azul"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-destacados">
+            <div class="encabezado-seccion">
+                <div>
+                    <p class="texto-etiqueta">Colección disponible</p>
+                    <h2 class="titulo-seccion">Libros destacados</h2>
+                </div>
+                <a class="enlace-ver-todo" th:href="@{/catalogo}">Ver todo el catálogo →</a>
+            </div>
+
+            <div class="mensaje-backend mensaje-alerta" th:if="${!backendDisponible}">
+                El backend no está disponible en este momento. Inicia el servidor y vuelve a intentarlo.
+            </div>
+
+            <div class="cuadricula-libros" th:if="${backendDisponible}">
+                <article class="tarjeta-libro" th:each="libro : ${librosDestacados}">
+                    <div class="tarjeta-portada">
+                        <span class="etiqueta-categoria" th:text="${libro.nombreCategoria}">Categoría</span>
+                        <span class="icono-libro">⌑</span>
+                    </div>
+                    <div class="tarjeta-contenido">
+                        <h3 class="libro-titulo" th:text="${libro.tituloLibro}">Título del libro</h3>
+                        <p class="libro-autor" th:text="${libro.autores != null ? libro.autores : 'Autor desconocido'}">Autor</p>
+                        <a class="enlace-detalle" th:href="@{/catalogo/{id}(id=${libro.idLibro})}">Ver detalle →</a>
+                        <div class="tarjeta-meta">
+                            <span class="meta-anio" th:text="${libro.anioPublicacionLibro}">2026</span>
+                            <span class="meta-disponibles"
+                                  th:text="${libro.ejemplaresDisponibles != null ? libro.ejemplaresDisponibles + ' disponibles' : 'Sin disponibilidad'}">
+                                Disponible
+                            </span>
+                        </div>
+                    </div>
+                </article>
+
+                <p class="mensaje-vacio" th:if="${#lists.isEmpty(librosDestacados)}">
+                    Aún no hay libros registrados en el catálogo.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p class="texto-pie">Sistema de Biblioteca El Buen Futuro</p>
+    </footer>
+</body>
+</html>

@@ -23,6 +23,7 @@ public class FrontendApplication {
 	@Bean
 	public CommandLineRunner mostrarVentanaPrincipal(MainFrame mainFrame) {
 		return args -> SwingUtilities.invokeLater(() -> {
+			edu.itm.proyecto2026.frontend.Windows.BibliotecaTheme.aplicarTemaGlobal();
 			mainFrame.inicializar();
 			mainFrame.setVisible(true);
 		});
