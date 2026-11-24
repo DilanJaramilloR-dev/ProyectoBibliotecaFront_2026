@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${libro != null ? libro.tituloLibro + ' | Biblioteca' : 'Libro | Biblioteca'}">Libro</title>
+    <link rel="stylesheet" th:href="@{/css/biblioteca.css}">
+</head>
+<body class="pagina-detalle">
+    <header class="encabezado-principal">
+        <a class="marca-biblioteca" th:href="@{/}">
+            <span class="marca-icono">BF</span>
+            <span class="marca-texto">
+                <strong class="marca-nombre">El Buen Futuro</strong>
+                <small class="marca-eslogan">Biblioteca</small>
+            </span>
+        </a>
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+            <a class="enlace-navegacion" th:href="@{/}">Inicio</a>
+            <a class="enlace-navegacion activo" th:href="@{/catalogo}">Catálogo</a>
+            <a class="enlace-navegacion" th:href="@{/prestamos}">Préstamos</a>
+        </nav>
+    </header>
+
+    <main class="contenido-principal contenido-detalle">
+        <a class="enlace-volver" th:href="@{/catalogo}">← Volver al catálogo</a>
+
+        <div class="mensaje-backend mensaje-alerta" th:if="${!backendDisponible}">
+            No fue posible consultar la información de este libro.
+        </div>
+
+        <section class="detalle-libro" th:if="${backendDisponible and libro != null}">
+            <div class="detalle-portada">
+                <span class="detalle-portada-etiqueta" th:text="${libro.nombreCategoria}">Categoría</span>
+                <span class="detalle-portada-inicial"
+                      th:text="${#strings.isEmpty(libro.tituloLibro) ? '?' : #strings.substring(libro.tituloLibro, 0, 1)}">A</span>
+                <span class="detalle-portada-titulo" th:text="${libro.tituloLibro}">Título</span>
+            </div>
+
+            <div class="detalle-informacion">
+                <p class="texto-etiqueta" th:text="${libro.nombreCategoria}">Categoría</p>
+                <h1 class="detalle-titulo" th:text="${libro.tituloLibro}">Título</h1>
+                <p class="detalle-autor" th:text="${libro.autores != null ? 'por ' + libro.autores : 'Autor no registrado'}">Autor</p>
+
+                <div class="detalle-metricas">
+                    <div class="metrica-libro">
+                        <span class="metrica-etiqueta">Editorial</span>
+                        <strong class="metrica-valor" th:text="${libro.nombreEditorial != null ? libro.nombreEditorial : '—'}">Editorial</strong>
+                    </div>
+                    <div class="metrica-libro">
+                        <span class="metrica-etiqueta">Año</span>
+                        <strong class="metrica-valor" th:text="${libro.anioPublicacionLibro != null ? libro.anioPublicacionLibro : '—'}">2026</strong>
+                    </div>
+                    <div class="metrica-libro">
+                        <span class="metrica-etiqueta">Disponibles</span>
+                        <strong class="metrica-valor" th:text="${libro.ejemplaresDisponibles != null ? libro.ejemplaresDisponibles : 0}">0</strong>
+                    </div>
+                </div>
+
+                <div class="detalle-descripcion">
+                    <h2 class="detalle-subtitulo">Descripción</h2>
+                    <p class="detalle-texto"
+                       th:text="${libro.descripcionLibro != null and !#strings.isEmpty(libro.descripcionLibro) ? libro.descripcionLibro : 'No hay una descripción registrada para este libro.'}">
+                        Descripción del libro.
+                    </p>
+                </div>
+
+                <div class="detalle-ejemplares">
+                    <h2 class="detalle-subtitulo">Ejemplares</h2>
+                    <p class="detalle-texto mensaje-vacio-detalle" th:if="${#lists.isEmpty(ejemplares)}">
+                        No hay ejemplares registrados.
+                    </p>
+                    <ul class="lista-ejemplares" th:if="${!#lists.isEmpty(ejemplares)}">
+                        <li class="item-ejemplar" th:each="ejemplar : ${ejemplares}">
+                            <span class="codigo-ejemplar" th:text="${ejemplar.codigoInventario}">Código</span>
+                            <span class="estado-ejemplar"
+                                  th:classappend="${ejemplar.disponibilidadEjemplar == 'Disponible' or ejemplar.disponibilidadEjemplar == 'si'} ? ' disponible' : ' prestado'"
+                                  th:text="${ejemplar.disponibilidadEjemplar}">Disponible</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <a class="boton boton-primario boton-prestar"
+                   th:href="@{/prestamos}">Gestionar préstamo</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p class="texto-pie">Sistema de Biblioteca El Buen Futuro</p>
+    </footer>
+</body>
+</html>

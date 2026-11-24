@@ -53,6 +53,7 @@ public class EditorialesFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        BibliotecaTheme.estilizarVentana(this);
 
         txtId.setEditable(false);
 

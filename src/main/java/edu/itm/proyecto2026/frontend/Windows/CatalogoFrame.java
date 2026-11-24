@@ -52,6 +52,7 @@ public class CatalogoFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        BibliotecaTheme.estilizarVentana(this);
 
         JPanel filtros = new JPanel(new GridLayout(1, 6, 8, 8));
         filtros.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));

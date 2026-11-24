@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Biblioteca El Buen Futuro</title>
+    <link rel="stylesheet" th:href="@{/css/biblioteca.css}">
+</head>
+<body class="pagina-catalogo">
+    <header class="encabezado-principal">
+        <a class="marca-biblioteca" th:href="@{/}">
+            <span class="marca-icono">BF</span>
+            <span class="marca-texto">
+                <strong class="marca-nombre">El Buen Futuro</strong>
+                <small class="marca-eslogan">Biblioteca</small>
+            </span>
+        </a>
+
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+            <a class="enlace-navegacion" th:href="@{/}">Inicio</a>
+            <a class="enlace-navegacion activo" th:href="@{/catalogo}">Catálogo</a>
+            <a class="enlace-navegacion" th:href="@{/prestamos}">Préstamos</a>
+        </nav>
+    </header>
+
+    <main class="contenido-principal contenido-catalogo">
+        <section class="encabezado-catalogo">
+            <p class="texto-etiqueta">Colección completa</p>
+            <h1 class="titulo-catalogo">Catálogo de libros</h1>
+        </section>
+
+        <section class="panel-filtros">
+            <form class="formulario-filtros" th:action="@{/catalogo}" method="get">
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="titulo">Título</label>
+                    <input class="campo-texto" id="titulo" name="titulo" type="text"
+                           th:value="${tituloFiltro}" placeholder="Ej. Cien años de soledad">
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="autor">Autor</label>
+                    <input class="campo-texto" id="autor" name="autor" type="text"
+                           th:value="${autorFiltro}" placeholder="Nombre del autor">
+                </div>
+
+                <div class="grupo-campo">
+                    <label class="etiqueta-campo" for="categoria">Categoría</label>
+                    <input class="campo-texto" id="categoria" name="categoria" type="text"
+                           th:value="${categoriaFiltro}" placeholder="Ej. Novela">
+                </div>
+
+                <div class="acciones-filtros">
+                    <button class="boton boton-primario" type="submit">Buscar</button>
+                    <a class="boton boton-secundario" th:href="@{/catalogo}">Limpiar</a>
+                </div>
+            </form>
+        </section>
+
+        <div class="mensaje-backend mensaje-alerta" th:if="${!backendDisponible}">
+            El backend no está disponible. Verifica el puerto y el contexto configurados en <strong>application.yaml</strong>.
+        </div>
+
+        <section class="seccion-resultados" th:if="${backendDisponible}">
+            <div class="barra-resultados">
+                <p class="cantidad-resultados">
+                    <strong th:text="${#lists.size(libros)}">0</strong> resultados encontrados
+                </p>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-libros">
+                    <thead class="tabla-cabecera">
+                        <tr class="fila-cabecera">
+                            <th class="celda-cabecera">Título</th>
+                            <th class="celda-cabecera">Autor</th>
+                            <th class="celda-cabecera">Categoría</th>
+                            <th class="celda-cabecera">Editorial</th>
+                            <th class="celda-cabecera">Año</th>
+                            <th class="celda-cabecera">Disponibles</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tabla-cuerpo">
+                        <tr class="fila-libro" th:each="libro : ${libros}">
+                            <td class="celda-libro celda-titulo">
+                                <a class="enlace-titulo-tabla"
+                                   th:href="@{/catalogo/{id}(id=${libro.idLibro})}"
+                                   th:text="${libro.tituloLibro}">Título</a>
+                            </td>
+                            <td class="celda-libro" th:text="${libro.autores != null ? libro.autores : '—'}">Autor</td>
+                            <td class="celda-libro" th:text="${libro.nombreCategoria}">Categoría</td>
+                            <td class="celda-libro" th:text="${libro.nombreEditorial}">Editorial</td>
+                            <td class="celda-libro" th:text="${libro.anioPublicacionLibro}">2026</td>
+                            <td class="celda-libro">
+                                <span class="insignia-disponibles"
+                                      th:text="${libro.ejemplaresDisponibles != null ? libro.ejemplaresDisponibles : 0}">
+                                    0
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="fila-vacia" th:if="${#lists.isEmpty(libros)}">
+                            <td class="celda-vacia" colspan="6">No se encontraron libros con esos filtros.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p class="texto-pie">Sistema de Biblioteca El Buen Futuro</p>
+    </footer>
+</body>
+</html>

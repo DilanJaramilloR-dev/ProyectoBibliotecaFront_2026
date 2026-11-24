@@ -46,6 +46,7 @@ public class ReportesFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        BibliotecaTheme.estilizarVentana(this);
 
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 18));
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
